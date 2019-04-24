@@ -27,8 +27,16 @@ public class ProgramHelper
     throwException(allValues);
     String[] arrOfValues = allValues.split("/");
     name = arrOfValues[0];
-    weight = Integer.parseInt(arrOfValues[1]);
-    value = Integer.parseInt(arrOfValues[2]);
+    try
+    {
+      weight = Integer.parseInt(arrOfValues[1]);
+      value = Integer.parseInt(arrOfValues[2]);
+    }catch(NumberFormatException numberExc)
+    {
+      System.out.println("There was a problem getting an input" +
+          " for maximum weight limit - use integer numbers only to represent the weight.");
+      System.exit(1);
+    }
   }
 
   public void fillArrayList()

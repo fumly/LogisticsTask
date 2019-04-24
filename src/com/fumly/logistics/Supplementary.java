@@ -82,10 +82,18 @@ public class Supplementary
         }
       }
       finalPrice+=currentHighestPrice;
+      try
+      {
       sb.append(best.getProductName() + " ");
+      }catch(NullPointerException nullExc)
+      {
+        System.out.println("Not a single option has been found.");
+        System.exit(1);
+      }
       weightLimit -= best.getProductWeight();
       ph.getToLoad().remove(best);
     }
+
     sb.append(finalPrice);
     result = sb.toString();
     return result;
