@@ -34,7 +34,7 @@ public class Supplementary
     }catch(NumberFormatException numberExc)
     {
       System.out.println("There was a problem getting an input" +
-          " for maximum weight limit");
+          " for maximum weight limit - use numbers only to represent the weight.");
       System.exit(1);
     }
     return weightInt;

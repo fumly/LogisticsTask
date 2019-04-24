@@ -61,6 +61,7 @@ public class ProgramHelper
       System.out.print("You are using incorrect syntax. ");
       System.out.println("The correct syntax for this program " +
           "is: product_name/weight/price.");
+      System.out.println("Input data must be divided by a whitespace.");
       System.exit(1);
     }
   }
