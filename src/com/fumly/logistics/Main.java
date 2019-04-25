@@ -1,11 +1,10 @@
 package com.fumly.logistics;
 
 public class Main {
-    public static void main(String[] args) {
-        int maxWeight = Supplementary.stringToInt(Supplementary.getInput());
-        Supplementary.start(Supplementary.getInput().split(" "));
-        System.out.println(Supplementary.bestOption(maxWeight));
-    }
+  public static void main(String[] args) {
+    TransportQueue.defineBestOption(InputReader.stringToInt(InputReader.getInput()),
+            InputReader.getInput().split(" "));
+  }
 }
 
 

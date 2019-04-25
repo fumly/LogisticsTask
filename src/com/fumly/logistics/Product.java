@@ -1,29 +1,68 @@
 package com.fumly.logistics;
 
 public class Product {
-    private String productName;
-    private int productWeight;
-    private int productPrice;
 
-    public Product(String productName, int productWeight, int productPrice) {
-        this.productName = productName;
-        this.productWeight = productWeight;
-        this.productPrice = productPrice;
-    }
+  private static int entries;
+  private String objectName;
+  private String productName;
+  private int productWeight;
+  private int productPrice;
 
-    public String getProductName() {
-        return productName;
-    }
+  private Product() {
+  }
 
-    public int getProductWeight() {
-        return productWeight;
-    }
+  public Product(String productName, int productWeight, int productPrice) {
+    this.productName = productName;
+    this.productWeight = productWeight;
+    this.productPrice = productPrice;
+    entries++;
+    setObjectName();
+  }
 
-    public int getProductPrice() {
-        return productPrice;
-    }
+  public String getProductName() {
+    return productName;
+  }
 
-    public String printList() {
-        return productName + "/" + productWeight + "/" + productPrice;
+  public int getProductWeight() {
+    return productWeight;
+  }
+
+  public int getProductPrice() {
+    return productPrice;
+  }
+
+  private void setObjectName()
+  {
+    objectName = this.getClass().getSimpleName() + " " + entries;
+  }
+
+  public String printList() {
+    return productName + "/" + productWeight + "/" + productPrice;
+  }
+
+  @Override
+  public boolean equals(Object otherObj) {
+    if (this == otherObj) {
+      return true;
     }
+    if (otherObj == null) {
+      return false;
+    }
+    if (getClass() != otherObj.getClass()) {
+      return false;
+    }
+    Product obj = (Product) otherObj;
+
+    return productName.equals(obj.getProductName()) &&
+            productWeight == obj.getProductWeight() &&
+            productPrice == obj.getProductPrice() &&
+            hashCode() == obj.hashCode();
+  }
+
+  @Override
+  public int hashCode() {
+    int result = productName != null ? productName.hashCode() : 0;
+    result = 31 * result + objectName.hashCode();
+    return result;
+  }
 }
