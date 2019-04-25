@@ -25,8 +25,9 @@ public class TransportQueue {
   private void saveData(String allValues) {
     try {
       String[] arrOfValues = allValues.split("/");
-      if (!allValues.contains("/") || arrOfValues.length != 3)
+      if (!allValues.contains("/") || arrOfValues.length != 3) {
         throw new Exception("Program stopped with an error.");
+      }
       toLoad.add(new Product(arrOfValues[0],
               Integer.parseInt(arrOfValues[1]), Integer.parseInt(arrOfValues[2])));
     } catch (NumberFormatException numberExc) {

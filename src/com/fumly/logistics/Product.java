@@ -31,8 +31,7 @@ public class Product {
     return productPrice;
   }
 
-  private void setObjectName()
-  {
+  private void setObjectName() {
     objectName = this.getClass().getSimpleName() + " " + entries;
   }
 
