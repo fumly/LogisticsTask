@@ -19,8 +19,7 @@ public class InputReader {
     int intInput = 0;
     try {
       intInput = Integer.parseInt(weightStr);
-      if (intInput < 0)
-      {
+      if (intInput < 0) {
         throw new Exception("You've entered a negative number.");
       }
       return intInput;
@@ -29,8 +28,7 @@ public class InputReader {
               "for maximum weight limit - use integer " +
               "numbers only to represent the weight.");
       System.exit(1);
-    }catch (Exception negativeExc)
-    {
+    } catch (Exception negativeExc) {
       System.out.println(negativeExc.getMessage());
       System.out.println("Weight should not be represented by a negative number.");
       System.exit(1);
