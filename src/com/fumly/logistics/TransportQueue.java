@@ -25,7 +25,8 @@ public class TransportQueue {
   private void saveData(String allValues) {
     try {
       String[] arrOfValues = allValues.split("/");
-      if (!allValues.contains("/") || arrOfValues.length != 3) {
+      if (!allValues.contains("/") || arrOfValues.length != 3 ||
+              Integer.parseInt(arrOfValues[1]) < 0 || Integer.parseInt(arrOfValues[2]) < 0) {
         throw new Exception("Program stopped with an error.");
       }
       toLoad.add(new Product(arrOfValues[0],
@@ -39,6 +40,7 @@ public class TransportQueue {
       System.out.print("You are using incorrect syntax. ");
       System.out.println("The correct syntax for this program " +
               "is: product_name/weight/price.");
+      System.out.println("Parameters weight and price should be positive values");
       System.out.println("Input data must be divided by a whitespace.");
       System.exit(1);
     }
@@ -59,6 +61,21 @@ public class TransportQueue {
           it.remove();
           continue;
         } else if (current.getProductPrice() >= currentHighestPrice) {
+          int cumulativePrice = 0;
+          int cumulativeWeight = 0;
+          for (Product p : toLoad) {
+            if (!p.equals(current)) {
+              cumulativePrice += p.getProductPrice();
+              if (cumulativeWeight > current.getProductWeight()) {
+                continue;
+              }
+              cumulativeWeight += p.getProductWeight();
+            }
+          }
+          if (cumulativePrice >= current.getProductPrice() &&
+                  cumulativeWeight < current.getProductWeight()) {
+            continue;
+          }
           best = current;
           currentHighestPrice = current.getProductPrice();
         }
