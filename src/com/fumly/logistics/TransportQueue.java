@@ -65,10 +65,10 @@ public class TransportQueue {
           int cumulativeWeight = 0;
           for (Product p : toLoad) {
             if (!p.equals(current)) {
-              cumulativePrice += p.getProductPrice();
               if (cumulativeWeight > current.getProductWeight()) {
                 continue;
               }
+              cumulativePrice += p.getProductPrice();
               cumulativeWeight += p.getProductWeight();
             }
           }
