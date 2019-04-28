@@ -53,14 +53,12 @@ public class TransportQueue {
     int weightLimit = maxWeight;
     int bestPrice = 0;
     StringBuilder sb = new StringBuilder();
-    while(weightLimit>0 && !toLoad.isEmpty())
-    {
-      List<Product> temp = new ArrayList<>(toLoad);
-      for(Iterator<Product> it = temp.iterator(); it.hasNext();)
-      {
+    List<Product> temp = new ArrayList<>(toLoad);
+    while (weightLimit > 0 && !toLoad.isEmpty()) {
+      for (Iterator<Product> it = temp.iterator(); it.hasNext(); ) {
+        temp = new ArrayList<>(toLoad);
         Product current = it.next();
-        if(weightLimit-current.getProductWeight()<0)
-        {
+        if (weightLimit - current.getProductWeight() < 0) {
           it.remove();
           toLoad.remove(current);
           continue;
@@ -68,51 +66,43 @@ public class TransportQueue {
         List<Product> insideTemp = new ArrayList<>(temp);
         Collections.sort(insideTemp, new Product());
         int currentWeightLimit = current.getProductWeight();
-        while (currentWeightLimit > 0 && !insideTemp.isEmpty())
-        {
+        while (currentWeightLimit > 0 && !insideTemp.isEmpty()) {
           int insideBestPrice = 0;
-          int insideBestWeight=0;
+          int insideBestWeight = 0;
           StringBuilder insideBuilder = new StringBuilder();
-          for (Iterator<Product> insideIt = insideTemp.iterator(); insideIt.hasNext();)
-          {
+          for (Iterator<Product> insideIt = insideTemp.iterator(); insideIt.hasNext(); ) {
             Product insideCurrent = insideIt.next();
-            if(currentWeightLimit - insideCurrent.getProductWeight()<0 || insideCurrent.equals(current))
-            {
+            if (currentWeightLimit - insideCurrent.getProductWeight() < 0 || insideCurrent.equals(current)) {
               insideIt.remove();
               continue;
             }
             currentWeightLimit -= insideCurrent.getProductWeight();
-            insideBestWeight+=insideCurrent.getProductWeight();
+            insideBestWeight += insideCurrent.getProductWeight();
             insideBuilder.append(insideCurrent.getProductName() + " ");
             insideBestPrice += insideCurrent.getProductPrice();
             toLoad.remove(insideCurrent);
             insideIt.remove();
           }
-          if(insideBestPrice>current.getProductPrice())
-          {
+          if (insideBestPrice > current.getProductPrice()) {
             sb.append(insideBuilder);
             weightLimit -= insideBestWeight;
-            bestPrice +=insideBestPrice;
-          }
-          else
-          {
+            bestPrice += insideBestPrice;
+          } else {
             sb.append(current.getProductName() + " ");
             weightLimit -= current.getProductWeight();
             bestPrice += current.getProductPrice();
           }
         }
-        if(weightLimit-current.getProductWeight() >= 0 && toLoad.size()==1)
-        {
+        if (weightLimit - current.getProductWeight() >= 0 && toLoad.size() == 1) {
           sb.append(current.getProductName() + " ");
-          weightLimit-=current.getProductWeight();
-          bestPrice+=current.getProductPrice();
+          weightLimit -= current.getProductWeight();
+          bestPrice += current.getProductPrice();
         }
         toLoad.remove(current);
         it.remove();
       }
     }
-    if (bestPrice == 0)
-    {
+    if (bestPrice == 0) {
       System.out.println("Not a single value was found");
       System.exit(1);
     }
