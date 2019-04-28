@@ -1,6 +1,8 @@
 package com.fumly.logistics;
 
-public class Product {
+import java.util.Comparator;
+
+public class Product implements Comparable<Product>, Comparator<Product> {
 
   private static int entries;
   private String objectName;
@@ -8,7 +10,11 @@ public class Product {
   private int productWeight;
   private int productPrice;
 
-  private Product() {
+  public Product() {
+  }
+
+  public String getObjectName() {
+    return objectName;
   }
 
   public Product(String productName, int productWeight, int productPrice) {
@@ -17,6 +23,7 @@ public class Product {
     this.productPrice = productPrice;
     entries++;
     setObjectName();
+
   }
 
   public String getProductName() {
@@ -63,5 +70,15 @@ public class Product {
     int result = productName != null ? productName.hashCode() : 0;
     result = 31 * result + objectName.hashCode();
     return result;
+  }
+
+  @Override
+  public int compareTo(Product toCompare) {
+    return Integer.compare(toCompare.getProductPrice(), this.getProductPrice());
+  }
+
+  @Override
+  public int compare(Product p1, Product p2) {
+    return p1.getProductWeight() - p2.getProductWeight();
   }
 }

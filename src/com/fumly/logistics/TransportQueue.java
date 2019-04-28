@@ -19,6 +19,7 @@ public class TransportQueue {
         break;
       }
     }
+    Collections.sort(tq.toLoad);
     System.out.println(tq.getHighestValues(weightLimit));
   }
 
@@ -47,56 +48,76 @@ public class TransportQueue {
   }
 
   private String getHighestValues(int maxWeight) {
-    int weightLimit = maxWeight;
-    int finalPrice = 0;
-    Product best = null;
-    Product previousBest = null;
+
     String result = null;
+    int weightLimit = maxWeight;
+    int bestPrice = 0;
     StringBuilder sb = new StringBuilder();
-    while (weightLimit > 0 && !toLoad.isEmpty()) {
-      int currentHighestPrice = 0;
-      for (Iterator<Product> it = toLoad.iterator(); it.hasNext(); ) {
+    while(weightLimit>0 && !toLoad.isEmpty())
+    {
+      List<Product> temp = new ArrayList<>(toLoad);
+      for(Iterator<Product> it = temp.iterator(); it.hasNext();)
+      {
         Product current = it.next();
-        if (weightLimit - current.getProductWeight() < 0) {
+        if(weightLimit-current.getProductWeight()<0)
+        {
           it.remove();
+          toLoad.remove(current);
           continue;
-        } else if (current.getProductPrice() >= currentHighestPrice) {
-          int cumulativePrice = 0;
-          int cumulativeWeight = 0;
-          for (Product p : toLoad) {
-            if (!p.equals(current)) {
-              if (cumulativeWeight > current.getProductWeight()) {
-                continue;
-              }
-              cumulativePrice += p.getProductPrice();
-              cumulativeWeight += p.getProductWeight();
+        }
+        List<Product> insideTemp = new ArrayList<>(temp);
+        Collections.sort(insideTemp, new Product());
+        int currentWeightLimit = current.getProductWeight();
+        while (currentWeightLimit > 0 && !insideTemp.isEmpty())
+        {
+          int insideBestPrice = 0;
+          int insideBestWeight=0;
+          StringBuilder insideBuilder = new StringBuilder();
+          for (Iterator<Product> insideIt = insideTemp.iterator(); insideIt.hasNext();)
+          {
+            Product insideCurrent = insideIt.next();
+            if(currentWeightLimit - insideCurrent.getProductWeight()<0 || insideCurrent.equals(current))
+            {
+              insideIt.remove();
+              continue;
             }
+            currentWeightLimit -= insideCurrent.getProductWeight();
+            insideBestWeight+=insideCurrent.getProductWeight();
+            insideBuilder.append(insideCurrent.getProductName() + " ");
+            insideBestPrice += insideCurrent.getProductPrice();
+            toLoad.remove(insideCurrent);
+            insideIt.remove();
           }
-          if (cumulativePrice >= current.getProductPrice() &&
-                  cumulativeWeight < current.getProductWeight()) {
-            continue;
+          if(insideBestPrice>current.getProductPrice())
+          {
+            sb.append(insideBuilder);
+            weightLimit -= insideBestWeight;
+            bestPrice +=insideBestPrice;
           }
-          best = current;
-          currentHighestPrice = current.getProductPrice();
+          else
+          {
+            sb.append(current.getProductName() + " ");
+            weightLimit -= current.getProductWeight();
+            bestPrice += current.getProductPrice();
+          }
         }
-      }
-      try {
-        if (!best.equals(previousBest)) {
-          sb.append(best.getProductName() + " ");
-          finalPrice += currentHighestPrice;
-          weightLimit -= best.getProductWeight();
-          toLoad.remove(best);
-        } else {
-          break;
+        if(weightLimit-current.getProductWeight() >= 0 && toLoad.size()==1)
+        {
+          sb.append(current.getProductName() + " ");
+          weightLimit-=current.getProductWeight();
+          bestPrice+=current.getProductPrice();
         }
-      } catch (NullPointerException npExc) {
-        System.out.println("Not a single value was found");
-        System.exit(1);
+        toLoad.remove(current);
+        it.remove();
       }
-      previousBest = best;
     }
-    sb.append(finalPrice);
-    result = sb.toString();
+    if (bestPrice == 0)
+    {
+      System.out.println("Not a single value was found");
+      System.exit(1);
+    }
+    result = sb.toString() + bestPrice;
+
     return result;
   }
 }
