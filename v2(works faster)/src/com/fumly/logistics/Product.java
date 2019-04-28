@@ -72,6 +72,7 @@ public class Product implements Comparable<Product> {
 
   @Override
   public int compareTo(Product toCompare) {
-    return Integer.compare(toCompare.getProductPrice()/toCompare.getProductWeight(), this.getProductPrice()/this.getProductWeight());
+    return Integer.compare(toCompare.getProductPrice() / toCompare.getProductWeight(),
+            this.getProductPrice() / this.getProductWeight());
   }
 }
