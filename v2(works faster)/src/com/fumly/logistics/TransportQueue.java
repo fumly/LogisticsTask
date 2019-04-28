@@ -53,7 +53,7 @@ public class TransportQueue {
     int weightLimit = maxWeight;
     StringBuilder sb = new StringBuilder();
     int price = 0;
-    while (weightLimit > 0 && !toLoad.isEmpty())
+    while (weightLimit > 0)
     {
       for (Iterator<Product> it =toLoad.iterator();it.hasNext();)
       {
@@ -67,7 +67,7 @@ public class TransportQueue {
         }
         else if (weightLimit-current.getProductWeight()<0)
         {
-          it.remove();
+          weightLimit -= current.getProductWeight();
         }
       }
     }
