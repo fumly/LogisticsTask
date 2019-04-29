@@ -8,7 +8,7 @@ public class Product implements Comparable<Product> {
   private int productWeight;
   private int productPrice;
 
-  public Product() {
+  private Product() {
   }
 
   public String getObjectName() {
