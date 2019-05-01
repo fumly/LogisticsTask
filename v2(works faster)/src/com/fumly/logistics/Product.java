@@ -11,10 +11,6 @@ public class Product implements Comparable<Product> {
   private Product() {
   }
 
-  public String getObjectName() {
-    return objectName;
-  }
-
   public Product(String productName, int productWeight, int productPrice) {
     this.productName = productName;
     this.productWeight = productWeight;
@@ -38,10 +34,6 @@ public class Product implements Comparable<Product> {
 
   private void setObjectName() {
     objectName = this.getClass().getSimpleName() + " " + entries;
-  }
-
-  public String printList() {
-    return productName + "/" + productWeight + "/" + productPrice;
   }
 
   @Override
@@ -72,7 +64,7 @@ public class Product implements Comparable<Product> {
 
   @Override
   public int compareTo(Product toCompare) {
-    return Integer.compare(toCompare.getProductPrice() / toCompare.getProductWeight(),
-            this.getProductPrice() / this.getProductWeight());
+    return Double.compare((double) toCompare.getProductPrice() / toCompare.getProductWeight(),
+            (double) this.getProductPrice() / this.getProductWeight());
   }
 }

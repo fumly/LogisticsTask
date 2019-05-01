@@ -3,27 +3,26 @@ package com.fumly.logistics;
 import java.util.*;
 
 public class TransportQueue {
-  List<Product> toLoad = new ArrayList<>();
-
   private TransportQueue() {
   }
 
   public static void defineBestOption(int weightLimit, String[] listOfProducts) {
-    TransportQueue tq = new TransportQueue();
+    List<Product> toLoad = new ArrayList<>();
     for (int count = 0; count < listOfProducts.length; count++) {
       try {
-        tq.saveData(listOfProducts[count]);
+        saveData(listOfProducts[count], toLoad);
       } catch (ArrayIndexOutOfBoundsException arrayExc) {
         System.out.println("At least one of your values " +
                 "cannot be contained inside of an array.");
         break;
       }
     }
-    Collections.sort(tq.toLoad);
-    System.out.println(tq.getHighestValues(weightLimit));
+    Collections.sort(toLoad);
+    System.out.println();
+    System.out.println(getHighestValues(weightLimit, toLoad));
   }
 
-  private void saveData(String allValues) {
+  private static void saveData(String allValues, List<Product> toLoad) {
     try {
       String[] arrOfValues = allValues.split("/");
       if (!allValues.contains("/") || arrOfValues.length != 3 ||
@@ -47,13 +46,13 @@ public class TransportQueue {
     }
   }
 
-  private String getHighestValues(int maxWeight) {
+  private static String getHighestValues(int maxWeight, List<Product> toLoad) {
 
     String result = null;
     int weightLimit = maxWeight;
     StringBuilder sb = new StringBuilder();
     int price = 0;
-    while (weightLimit > 0) {
+    while (weightLimit > 0 && !toLoad.isEmpty()) {
       for (Iterator<Product> it = toLoad.iterator(); it.hasNext(); ) {
         Product current = it.next();
         if (weightLimit - current.getProductWeight() >= 0) {
@@ -62,7 +61,7 @@ public class TransportQueue {
           price += current.getProductPrice();
           it.remove();
         } else {
-          weightLimit -= current.getProductWeight();
+          it.remove();
         }
       }
     }
