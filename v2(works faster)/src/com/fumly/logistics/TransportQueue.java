@@ -18,7 +18,6 @@ public class TransportQueue {
       }
     }
     Collections.sort(toLoad);
-    System.out.println();
     System.out.println(getHighestValues(weightLimit, toLoad));
   }
 
@@ -47,19 +46,50 @@ public class TransportQueue {
   }
 
   private static String getHighestValues(int maxWeight, List<Product> toLoad) {
-
     String result = null;
     int weightLimit = maxWeight;
     StringBuilder sb = new StringBuilder();
+    List<Product> usedProduct = new ArrayList<>();
     int price = 0;
     while (weightLimit > 0 && !toLoad.isEmpty()) {
       for (Iterator<Product> it = toLoad.iterator(); it.hasNext(); ) {
         Product current = it.next();
-        if (weightLimit - current.getProductWeight() >= 0) {
-          sb.append(current.getProductName() + " ");
-          weightLimit -= current.getProductWeight();
-          price += current.getProductPrice();
+        if (usedProduct.contains(current)) {
           it.remove();
+          continue;
+        }
+        if (weightLimit - current.getProductWeight() >= 0) {
+          int insideWeight = 0;
+          int insidePrice = 0;
+          StringBuilder insideSb = new StringBuilder();
+          for (Product p : toLoad) {
+            if (!p.equals(current) && p.getProductPrice() != current.getProductPrice() &&
+                    p.getProductWeight() != current.getProductWeight() &&
+                    !p.getProductName().equals(current.getProductName()) &&
+                    (double) (p.getProductPrice() / p.getProductWeight()) == 1) {
+              if (usedProduct.contains(p)) {
+                continue;
+              }
+              insideWeight += p.getProductWeight();
+              insidePrice += p.getProductPrice();
+              insideSb.append(p.getProductName() + " ");
+              usedProduct.add(p);
+            }
+            if (insidePrice > current.getProductPrice() && insideWeight <= weightLimit) {
+              break;
+            }
+          }
+          if (insidePrice > current.getProductPrice() && insideWeight <= weightLimit) {
+            sb.append(insideSb);
+            price += insidePrice;
+            weightLimit -= insideWeight;
+            continue;
+          } else {
+            sb.append(current.getProductName() + " ");
+            weightLimit -= current.getProductWeight();
+            price += current.getProductPrice();
+            it.remove();
+          }
         } else {
           it.remove();
         }
